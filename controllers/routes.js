@@ -36,5 +36,5 @@ router.get('/show-all-emp',(req,res)=>{
         }
     })
 })
-
+// exporting modules
 module.exports=router  
