@@ -86,7 +86,7 @@ router.post('/final-update',(req,res)=>{
 
   router.post('/api/posts',verifyToken,(req,res)=>{
 
-    jwt.verify(req.token,'secretkey',(err,data)=>{
+    jwt.verify(req.token,'mayank',(err,data)=>{
         if(err){
             res.sendStatus(403)
         }else{
@@ -109,7 +109,7 @@ router.post('/login',(req,res)=>{
         password:'3000'
     }
 
-    jwt.sign({user:user},'mayan',{expiresIn:'60s'},(err,token)=>{
+    jwt.sign({user:user},'mayank',{expiresIn:'60s'},(err,token)=>{
         res.json({token})
     })
 })
