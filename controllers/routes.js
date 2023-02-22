@@ -2,6 +2,7 @@ const express=require('express')
 const { findById } = require('../model/employee.model')
 const router=express.Router()
 const Employee= require('../model/employee.model')
+const jwt=require('jsonwebtoken')
 //home page
 router.get('/',(req,res)=>{
     res.render("home")
@@ -81,6 +82,62 @@ router.post('/final-update',(req,res)=>{
         else res.redirect('/emp/update-all-emp')
     })
   })
+
+
+  router.post('/api/posts',verifyToken,(req,res)=>{
+
+    jwt.verify(req.token,'secretkey',(err,data)=>{
+        if(err){
+            res.sendStatus(403)
+        }else{
+            res.json({
+                message:'Post Created!!!',
+                data:data
+            })
+        }
+    })
+    res.json({
+        message:'Post Created!!!'
+    })
+})
+
+router.post('/login',(req,res)=>{
+    // Mock user
+    const user={
+        id:1,
+        username:'steve',
+        password:'3000'
+    }
+
+    jwt.sign({user:user},'mayan',{expiresIn:'60s'},(err,token)=>{
+        res.json({token})
+    })
+})
+
+//Format of token
+//Authorization: Bearer <Token>
+function verifyToken(req,res,next){
+
+    //Get auth header value
+    const bearerHeader = req.headers['authorization'];
+    //Check if bearer is undefined
+
+    if(typeof bearerHeader!='undefined'){
+        //Split at the space
+        const bearer = bearerHeader.split(' ');
+        // Get toke from the array
+        const bearerToken = bearer[1];
+        //set the token
+        req.token = bearerToken;
+        //next middleware
+        next();
+    }else{
+        res.sendStatus(403)
+    }
+
+}
+
+
 
 // exporting modules
 module.exports=router  
